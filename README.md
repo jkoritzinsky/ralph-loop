@@ -50,6 +50,8 @@ Start a Ralph loop in the current session.
 /ralph-loop:start Build a REST API for todos --completion-promise 'DONE' --max-iterations 20
 ```
 
+Supports both Unix shell scripts (`.sh`) and Windows PowerShell scripts (`.ps1`).
+
 **Options:**
 
 | Flag | Description | Default |
@@ -140,9 +142,11 @@ ralph-loop/
 ├── commands/                  # Slash commands
 │   ├── start.md               # /ralph-loop:start command
 │   └── stop.md                # /ralph-loop:stop command
-├── scripts/                   # Shell scripts
+├── scripts/                   # Hook/setup scripts (bash + pwsh)
 │   ├── setup-ralph-loop.sh    # Loop initialization
+│   ├── setup-ralph-loop.ps1   # Loop initialization (Windows)
 │   └── stop-hook.sh           # agentStop hook script
+│   └── stop-hook.ps1          # agentStop hook script (Windows)
 └── README.md
 ```
 

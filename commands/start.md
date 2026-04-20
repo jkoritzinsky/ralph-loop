@@ -1,7 +1,7 @@
 ---
 description: "Start a Ralph Loop in the current session"
 argument-hint: "PROMPT [--max-iterations N] [--completion-promise TEXT]"
-allowed-tools: ["Bash(${COPILOT_PLUGIN_ROOT}/scripts/setup-ralph-loop.sh:*)"]
+allowed-tools: ["Bash(${COPILOT_PLUGIN_ROOT}/scripts/setup-ralph-loop.sh:*)", "PowerShell(${COPILOT_PLUGIN_ROOT}/scripts/setup-ralph-loop.ps1:*)"]
 hide-from-slash-command-tool: "true"
 ---
 
@@ -11,6 +11,12 @@ Execute the setup script to initialize the Ralph loop:
 
 ```!
 "${COPILOT_PLUGIN_ROOT}/scripts/setup-ralph-loop.sh" $ARGUMENTS
+```
+
+On Windows, use PowerShell instead:
+
+```!
+& "${COPILOT_PLUGIN_ROOT}/scripts/setup-ralph-loop.ps1" $ARGUMENTS
 ```
 
 Please work on the task. When you try to stop, the Ralph loop will feed the SAME PROMPT back to you for the next iteration. You'll see your previous work in files and git history, allowing you to iterate and improve.
