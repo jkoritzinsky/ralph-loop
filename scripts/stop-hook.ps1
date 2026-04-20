@@ -83,23 +83,12 @@ if (-not [string]::IsNullOrWhiteSpace($transcriptPath)) {
         exit 0
     }
 
-    $assistantLines = Get-Content -LiteralPath $transcriptPath | Where-Object { $_ -match '"role":"assistant"' }
-    if (-not $assistantLines -or $assistantLines.Count -eq 0) {
-        [Console]::Error.WriteLine("⚠️  Ralph loop: No assistant messages in transcript. Stopping loop.")
-        Remove-Item -LiteralPath $ralphStateFile -Force
-        exit 0
-    }
-
-    $assistantTexts = [System.Collections.Generic.List[string]]::new()
-    foreach ($line in ($assistantLines | Select-Object -Last 100)) {
+    $assistantEntries = [System.Collections.Generic.List[object]]::new()
+    foreach ($line in (Get-Content -LiteralPath $transcriptPath)) {
         try {
             $entry = $line | ConvertFrom-Json -ErrorAction Stop
-            if ($entry.message -and $entry.message.content) {
-                foreach ($item in $entry.message.content) {
-                    if ($item.type -eq "text" -and $null -ne $item.text) {
-                        $assistantTexts.Add([string]$item.text)
-                    }
-                }
+            if ($entry.role -eq "assistant") {
+                $assistantEntries.Add($entry)
             }
         }
         catch {
@@ -107,6 +96,21 @@ if (-not [string]::IsNullOrWhiteSpace($transcriptPath)) {
             [Console]::Error.WriteLine("   Error: $($_.Exception.Message)")
             Remove-Item -LiteralPath $ralphStateFile -Force
             exit 0
+        }
+    }
+    if ($assistantEntries.Count -eq 0) {
+        [Console]::Error.WriteLine("⚠️  Ralph loop: No assistant messages in transcript. Stopping loop.")
+        Remove-Item -LiteralPath $ralphStateFile -Force
+        exit 0
+    }
+    $assistantTexts = [System.Collections.Generic.List[string]]::new()
+    foreach ($entry in ($assistantEntries | Select-Object -Last 100)) {
+        if ($entry.message -and $entry.message.content) {
+            foreach ($item in $entry.message.content) {
+                if ($item.type -eq "text" -and $null -ne $item.text) {
+                    $assistantTexts.Add([string]$item.text)
+                }
+            }
         }
     }
 

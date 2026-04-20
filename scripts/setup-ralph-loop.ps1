@@ -115,7 +115,7 @@ started_at: "$startedAt"
 $prompt
 "@
 
-Set-Content -Path ".copilot/ralph-loop.local.md" -Value $stateContent
+Set-Content -LiteralPath ".copilot/ralph-loop.local.md" -Value $stateContent
 
 $maxIterationsText = if ($maxIterations -gt 0) { "$maxIterations" } else { "unlimited" }
 $completionDisplay = if ($completionPromise -ne "null") { $completionPromise.Replace('"', "") } else { "none (runs until cancelled or max iterations)" }
