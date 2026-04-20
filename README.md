@@ -145,7 +145,7 @@ ralph-loop/
 ├── scripts/                   # Hook/setup scripts (bash + pwsh)
 │   ├── setup-ralph-loop.sh    # Loop initialization
 │   ├── setup-ralph-loop.ps1   # Loop initialization (Windows)
-│   └── stop-hook.sh           # agentStop hook script
+│   ├── stop-hook.sh           # agentStop hook script
 │   └── stop-hook.ps1          # agentStop hook script (Windows)
 └── README.md
 ```

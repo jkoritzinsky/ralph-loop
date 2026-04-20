@@ -93,8 +93,7 @@ if ([string]::IsNullOrWhiteSpace($prompt)) {
 [void](New-Item -ItemType Directory -Path ".copilot" -Force)
 
 if (-not [string]::IsNullOrWhiteSpace($completionPromise) -and $completionPromise -ne "null") {
-    $escapedPromise = $completionPromise.Replace('"', '\"')
-    $completionPromiseYaml = '"' + $escapedPromise + '"'
+    $completionPromiseYaml = $completionPromise | ConvertTo-Json -Compress
 }
 else {
     $completionPromiseYaml = "null"
