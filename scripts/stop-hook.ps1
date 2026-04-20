@@ -1,4 +1,5 @@
 $ErrorActionPreference = "Stop"
+$MaxRecentAssistantEntries = 100
 
 $hookInput = [Console]::In.ReadToEnd()
 $ralphStateFile = ".copilot/ralph-loop.local.md"
@@ -104,7 +105,7 @@ if (-not [string]::IsNullOrWhiteSpace($transcriptPath)) {
         exit 0
     }
     $assistantTexts = [System.Collections.Generic.List[string]]::new()
-    $startIndex = [Math]::Max(0, $assistantEntries.Count - 100)
+    $startIndex = [Math]::Max(0, $assistantEntries.Count - $MaxRecentAssistantEntries)
     for ($entryIndex = $startIndex; $entryIndex -lt $assistantEntries.Count; $entryIndex++) {
         $entry = $assistantEntries[$entryIndex]
         if ($entry.message -and $entry.message.content) {
