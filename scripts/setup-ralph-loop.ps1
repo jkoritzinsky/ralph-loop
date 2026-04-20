@@ -93,13 +93,21 @@ if ([string]::IsNullOrWhiteSpace($prompt)) {
 [void](New-Item -ItemType Directory -Path ".copilot" -Force)
 
 if (-not [string]::IsNullOrWhiteSpace($completionPromise) -and $completionPromise -ne "null") {
-    $completionPromiseYaml = $completionPromise | ConvertTo-Json -Compress
+    $completionPromiseQuoted = $completionPromise | ConvertTo-Json -Compress
 }
 else {
-    $completionPromiseYaml = "null"
+    $completionPromiseQuoted = "null"
 }
 
-$sessionId = if ($env:COPILOT_SESSION_ID) { $env:COPILOT_SESSION_ID } elseif ($env:CLAUDE_CODE_SESSION_ID) { $env:CLAUDE_CODE_SESSION_ID } else { "" }
+$sessionId = if ($env:COPILOT_SESSION_ID) {
+    $env:COPILOT_SESSION_ID
+}
+elseif ($env:CLAUDE_CODE_SESSION_ID) {
+    $env:CLAUDE_CODE_SESSION_ID
+}
+else {
+    ""
+}
 $startedAt = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
 
 $stateContent = @"
@@ -108,7 +116,7 @@ active: true
 iteration: 1
 session_id: $sessionId
 max_iterations: $maxIterations
-completion_promise: $completionPromiseYaml
+completion_promise: $completionPromiseQuoted
 started_at: "$startedAt"
 ---
 
