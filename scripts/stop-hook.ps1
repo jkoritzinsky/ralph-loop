@@ -143,11 +143,18 @@ if ([string]::IsNullOrWhiteSpace($promptText)) {
 
 $tempFile = "$ralphStateFile.tmp.$PID"
 $stateLines = Get-Content -LiteralPath $ralphStateFile
+$iterationUpdated = $false
 for ($i = 0; $i -lt $stateLines.Count; $i++) {
     if ($stateLines[$i] -match '^iteration:\s*') {
         $stateLines[$i] = "iteration: $nextIteration"
+        $iterationUpdated = $true
         break
     }
+}
+if (-not $iterationUpdated) {
+    [Console]::Error.WriteLine("⚠️  Ralph loop: corrupted state (iteration field missing). Stopping.")
+    Remove-Item -LiteralPath $ralphStateFile -Force
+    exit 0
 }
 Set-Content -LiteralPath $tempFile -Value $stateLines
 Move-Item -LiteralPath $tempFile -Destination $ralphStateFile -Force
