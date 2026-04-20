@@ -94,7 +94,7 @@ if (-not [string]::IsNullOrWhiteSpace($transcriptPath)) {
     foreach ($line in ($assistantLines | Select-Object -Last 100)) {
         try {
             $entry = $line | ConvertFrom-Json -ErrorAction Stop
-            if ($entry.message.content) {
+            if ($entry.message -and $entry.message.content) {
                 foreach ($item in $entry.message.content) {
                     if ($item.type -eq "text" -and $null -ne $item.text) {
                         $assistantTexts.Add([string]$item.text)
