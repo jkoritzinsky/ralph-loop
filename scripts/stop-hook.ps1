@@ -104,7 +104,9 @@ if (-not [string]::IsNullOrWhiteSpace($transcriptPath)) {
         exit 0
     }
     $assistantTexts = [System.Collections.Generic.List[string]]::new()
-    foreach ($entry in ($assistantEntries | Select-Object -Last 100)) {
+    $startIndex = [Math]::Max(0, $assistantEntries.Count - 100)
+    for ($entryIndex = $startIndex; $entryIndex -lt $assistantEntries.Count; $entryIndex++) {
+        $entry = $assistantEntries[$entryIndex]
         if ($entry.message -and $entry.message.content) {
             foreach ($item in $entry.message.content) {
                 if ($item.type -eq "text" -and $null -ne $item.text) {
