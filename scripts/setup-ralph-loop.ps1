@@ -126,7 +126,10 @@ $prompt
 Set-Content -LiteralPath ".copilot/ralph-loop.local.md" -Value $stateContent
 
 $maxIterationsText = if ($maxIterations -gt 0) { "$maxIterations" } else { "unlimited" }
-$completionDisplay = if ($completionPromise -ne "null") { ([string]$completionPromise).Replace('"', "") } else { "none (runs until cancelled or max iterations)" }
+$completionDisplay = "none (runs until cancelled or max iterations)"
+if ($completionPromise -ne "null") {
+    $completionDisplay = ([string]$completionPromise).Replace('"', "")
+}
 
 @"
 🔄 Ralph loop activated!
